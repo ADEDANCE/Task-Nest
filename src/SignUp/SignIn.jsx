@@ -1,8 +1,11 @@
 import React from 'react'
+import SideNav from '../NAVBARS/SideNav'
 
 const SignIn = () => {
   return (
-    <div>SignIn</div>
+   <>
+      <SideNav />
+   </>
   )
 }
 
