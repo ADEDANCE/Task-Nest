@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Drawer,
   List,
@@ -11,65 +11,61 @@ import {
   Typography,
   IconButton,
   Divider,
-  ListItemIcon,
   Box,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import InboxIcon from '@mui/icons-material/Inbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Link, Routes, Route, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Routes, Route, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import AddTask from './AddTask';
 import { Button } from "react-bootstrap";
 
 const SideNav = () => {
   const drawerWidth = 240;
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Use useLocation to monitor the location (route change)
+  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const navigate = useNavigate();
+  // Function to close drawer after navigation
+  const handleCloseDrawer = () => {
+    setMobileOpen(false);
+  };
+
+  // Listen for route changes using useEffect and useLocation
+  useEffect(() => {
+    setMobileOpen(false); // Close the drawer when the route changes
+  }, [location]); // Depend on location to track changes
 
   const [showModal, setShowModal] = useState(false);
   const [task, setTask] = useState({ title: "", description: "" });
 
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
-
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
   const handleAddTask = () => {
     console.log("Task added:", task);
-    setTask({ title: "", description: "" }); // Reset task fields
+    setTask({ title: "", description: "" });
     handleClose();
-  }
+  };
+
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
       <List>
-      <div className="text-center mt-5">
-      <Button variant="primary" onClick={handleShow}>
-        Add New Task
-      </Button>
-
-      < AddTask
-        show={showModal}
-        handleClose={handleClose}
-        handleAddTask={handleAddTask}
-        task={task}
-        setTask={setTask}
-      />
-    </div>
-        {['Home-page','Inbox', 'Starred', 'Send Email', 'Drafts'].map((text, index) => (
+        <div className="text-center ">
+          <Button variant="primary" onClick={handleShow}>Add New Task</Button>
+        </div>
+        {['Home-page', 'Inbox', 'Starred', 'Send Email', 'Drafts'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton
               component={Link}
               to={`/sidenav/${text.toLowerCase().replace(' ', '-')}`}
+              onClick={handleCloseDrawer} // Close drawer on click
             >
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -79,20 +75,17 @@ const SideNav = () => {
   );
 
   return (
-   <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Clipped drawer
-          </Typography>
+          <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ marginRight: 2 }}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">Clipped drawer</Typography>
         </Toolbar>
       </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
+      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -113,19 +106,13 @@ const SideNav = () => {
           }}
           open
         >
-             
           {drawer}
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
+      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
         <Toolbar />
-     
         <Routes>
-          <Route path=''></Route>
-        <Route path="/" element={<Typography>Inbox t76Content</Typography>} />
+          <Route path="/" element={<Typography>Inbox Content</Typography>} />
           <Route path="/inbox" element={<Typography>Inbox Content</Typography>} />
           <Route path="/starred" element={<Typography>Starred Content</Typography>} />
           <Route path="/send-email" element={<Typography>Send Email Content</Typography>} />
@@ -133,6 +120,7 @@ const SideNav = () => {
         </Routes>
         <Outlet />
       </Box>
+      <AddTask show={showModal} handleClose={handleClose} handleAddTask={handleAddTask} task={task} setTask={setTask} />
     </Box>
   );
 };
