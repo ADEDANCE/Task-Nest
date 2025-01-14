@@ -4,3 +4,17 @@
     text-align: center;
     color: white;
 }
+
+/* .Taskbutton  {
+    background-color: bisque;
+    margin-left: 570px;
+    width: 300px;
+    text-align: center;
+} */
+
+.Task-Title {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
