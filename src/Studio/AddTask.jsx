@@ -1,53 +1,66 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {Container,Row,Col} from 'react-bootstrap'
+
 
 const AddTask = ({ show, handleClose, handleAddTask, task, setTask }) => {
-  // const [show, setShow] = useState(false);
-
-  
-
   return (
-
-
     <>
-  
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
+      <Modal show={show} onHide={handleClose} centered className="Taskbutton">
+        {/* <Modal.Header >
+          <Modal.Title >Add a New Task</Modal.Title>
+        </Modal.Header> */}
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Email address</Form.Label>
+            <Form.Group className="Task-Title mb-4" controlId="text">
+              {/* <Form.Label>Email address</Form.Label> */}
               <Form.Control
-                type="email"
-                placeholder="name@example.com"
+                 className="Task-Title"
+                type="text"
+                placeholder="Task Title"
                 autoFocus
+                
+                value={task.text || ""}
+                onChange={(e) => setTask({ ...task, text: e.target.value })}
               />
             </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <Form.Label>Example textarea</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+            <Form.Group className="Task-Title mb-3" controlId="formTaskDescription">
+              {/* <Form.Label>Task Description</Form.Label> */}
+              <Form.Control
+              className="Task-Title"
+              placeholder="Task Description"
+                as="textarea"
+                rows={2}
+                value={task.description || ""}
+                onChange={(e) =>
+                  setTask({ ...task, description: e.target.value })
+                }
+              />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+        <Container fluid="md">
+        <Row>
+        <Col><button> how</button></Col>
+        <Col>
+        <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleAddTask}>
             Save Changes
           </Button>
+        </Col>
+      </Row>
+           
+        
+          </Container>
         </Modal.Footer>
       </Modal>
     </>
   );
-}
+};
 
 export default AddTask;
