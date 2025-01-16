@@ -12,38 +12,37 @@ import {
   IconButton,
   Divider,
   Box,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link, Routes, Route, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Link, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import AddTask from './AddTask';
 import { Button } from "react-bootstrap";
 
 const SideNav = () => {
   const drawerWidth = 240;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate();
-
-  // Use useLocation to monitor the location (route change)
   const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  // Function to close drawer after navigation
-  const handleCloseDrawer = () => {
-    setMobileOpen(false);
-  };
-
-  // Listen for route changes using useEffect and useLocation
   useEffect(() => {
     setMobileOpen(false); // Close the drawer when the route changes
-  }, [location]); // Depend on location to track changes
+  }, [location]);
 
   const [showModal, setShowModal] = useState(false);
   const [task, setTask] = useState({ title: "", description: "" });
 
-  const handleShow = () => setShowModal(true);
+  
+  const handleShow = () => {
+    setShowModal(true);
+    if (isMobile) {
+      setMobileOpen(false); // Close the drawer on mobile
+    }
+  };
   const handleClose = () => setShowModal(false);
   const handleAddTask = () => {
     console.log("Task added:", task);
@@ -56,7 +55,7 @@ const SideNav = () => {
       <Toolbar />
       <Divider />
       <List>
-        <div className="text-center ">
+        <div className="text-center">
           <Button variant="primary" onClick={handleShow}>Add New Task</Button>
         </div>
         {['Home-page', 'Inbox', 'Starred', 'Send Email', 'Drafts'].map((text, index) => (
@@ -64,7 +63,7 @@ const SideNav = () => {
             <ListItemButton
               component={Link}
               to={`/sidenav/${text.toLowerCase().replace(' ', '-')}`}
-              onClick={handleCloseDrawer} // Close drawer on click
+              onClick={handleDrawerToggle }
             >
               <ListItemText primary={text} />
             </ListItemButton>
@@ -74,14 +73,25 @@ const SideNav = () => {
     </div>
   );
 
+  // Material-UI theme and media query hooks
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check if the screen is small
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-          <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ marginRight: 2 }}>
-            <MenuIcon />
-          </IconButton>
+          {isMobile && ( // Show the menu icon only on mobile
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ marginRight: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography variant="h6" noWrap component="div">Clipped drawer</Typography>
         </Toolbar>
       </AppBar>

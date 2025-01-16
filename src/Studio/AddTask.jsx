@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -5,7 +7,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {Container,Row,Col} from 'react-bootstrap'
 
 
+
+
+
 const AddTask = ({ show, handleClose, handleAddTask, task, setTask }) => {
+
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  
   return (
     <>
       <Modal show={show} onHide={handleClose} centered className="Taskbutton">
@@ -44,7 +57,21 @@ const AddTask = ({ show, handleClose, handleAddTask, task, setTask }) => {
         <Modal.Footer>
         <Container fluid="md">
         <Row>
-        <Col><button> how</button></Col>
+        <Col>
+        <FormControl fullWidth>
+      <InputLabel id="dropdown-label">Choose an option</InputLabel>
+      <Select
+        labelId="dropdown-label"
+        value={selectedOption}
+        onChange={handleChange}
+        label="Choose an option"
+      >
+        <MenuItem value="option1">Option 1</MenuItem>
+        <MenuItem value="option2">Option 2</MenuItem>
+        <MenuItem value="option3">Option 3</MenuItem>
+      </Select>
+    </FormControl>
+        </Col>
         <Col>
         <Button variant="secondary" onClick={handleClose}>
             Close
