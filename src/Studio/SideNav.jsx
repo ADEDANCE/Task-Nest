@@ -58,7 +58,7 @@ const SideNav = () => {
         <div className="text-center">
           <Button variant="primary" onClick={handleShow}>Add New Task</Button>
         </div>
-        {['Home-page', 'Inbox', 'Starred', 'Send Email', 'Drafts'].map((text, index) => (
+        { ['My project','Home', 'My work', 'Education'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton
               component={Link}
@@ -123,10 +123,10 @@ const SideNav = () => {
         <Toolbar />
         <Routes>
           <Route path="/" element={<Typography>Inbox Content</Typography>} />
-          <Route path="/inbox" element={<Typography>Inbox Content</Typography>} />
-          <Route path="/starred" element={<Typography>Starred Content</Typography>} />
-          <Route path="/send-email" element={<Typography>Send Email Content</Typography>} />
-          <Route path="/drafts" element={<Typography>Drafts Content</Typography>} />
+          <Route path="/My-project" element={<Typography>Inbox Content</Typography>} />
+          <Route path="/Home" element={<Typography>Starred Content</Typography>} />
+          <Route path="/Mywork" element={<Typography>Send Email Content</Typography>} />
+          <Route path="/Education" element={<Typography>Drafts Content</Typography>} />
         </Routes>
         <Outlet />
       </Box>
