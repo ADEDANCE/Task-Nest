@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 const DropdownSearch = ({ options }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isOpen, setIsopen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSelectedItem = (item) => {
     setSelectedItem(item);
     setSearchQuery(''); 
-    setIsopen(false);    
+    setIsOpen(false);    
   };
 
   const filteredOptions = options.filter((option) =>
@@ -17,23 +17,19 @@ const DropdownSearch = ({ options }) => {
   );
 
   return (
-    <div className='dropdown'>
-      <select
-      value={selectedItem}
-      onChange={(e) => setSelectedItem(e.target.value)}
-      style={{ width: '100%' }}
-    >
-      <option value="" disabled>
-        Select Project
-      </option>
-      {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-         
-  
+    <div className='dropdown' style={{ position: 'relative', width: '200px' }}>
+      <div 
+        className="dropdown-selected" 
+        onClick={() => setIsOpen(!isOpen)} 
+        style={{
+          padding: '8px', 
+          border: '1px solid #ccc', 
+          cursor: 'pointer', 
+          backgroundColor: '#fff'
+        }}
+      >
+        {selectedItem || 'Select Project'}
+      </div>
 
       {isOpen && (
         <div
@@ -57,7 +53,7 @@ const DropdownSearch = ({ options }) => {
           />
           <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
             {filteredOptions.length === 0 ? (
-              <li>Select Project</li>
+              <li style={{ padding: '8px' }}>No projects found</li>
             ) : (
               filteredOptions.map((option, index) => (
                 <li
@@ -69,7 +65,10 @@ const DropdownSearch = ({ options }) => {
                     backgroundColor: selectedItem === option ? '#d3d3d3' : 'transparent',
                   }}
                 >
-                   <Link to={`/sidenav/${option.toLowerCase().replace(' ', '-')}`} style={{ textDecoration: 'none', color: 'black' }}>
+                  <Link 
+                    to={`/sidenav/${option.toLowerCase().replace(' ', '-')}`} 
+                    style={{ textDecoration: 'none', color: 'black' }}
+                  >
                     {option}
                   </Link>
                 </li>
