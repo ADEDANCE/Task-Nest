@@ -1,20 +1,18 @@
-.nav {
-    background-color: rgb(243, 113, 113);
-    height: 70px;
-    text-align: center;
-    color: white;
+.container {
+    border: none;
+    padding: 0;
+   text-decoration: none;
+   display: flex;
 }
 
-/* .Taskbutton  {
-    background-color: bisque;
-    margin-left: 570px;
-    width: 300px;
-    text-align: center;
-} */
-
-.Task-Title {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
+.main {
+    width: 100%;
+    padding: 20px;
 }
 
+.active-link {
+    background-color: #575757;
+    font-weight: bold;
+  }
+
+ 
