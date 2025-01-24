@@ -1,68 +1,149 @@
-import React, { Children } from 'react'
-import {
-  FaTh,
-  FaBars,
-} from 'react-icons/fa'
-import {AiOutlineClose} from 'react-icons/ai'
-import {  NavLink } from 'react-router-dom';
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
-
-
-
-
+import React, { useEffect, useState } from 'react';  // Import useState if you plan to use it
+import { FaTh, FaBars,FaSearchPlus,FaAddressBook   } from 'react-icons/fa';
+import { AiOutlineClose } from 'react-icons/ai';
+import { MdWorkHistory } from "react-icons/md";
+import { NavLink } from 'react-router-dom';
+import {Row,Col} from 'react-bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css';
+ 
 const menuItem = [
-{
-  path:"/MyProject",
-  name:"MyProjects",
-  icon:<FaTh/>
-},
-{
-  path:"/Education",
-  name:"Education",
-  icon:<FaTh/>
-},
-]
+  {
+    path: "/AddTask",
+    name: "Add Task",
+    icon: <FaSearchPlus  />
+  },
+  {
+    path: "/MyProject",
+    name: "MyProjects",
+    icon: <FaTh />
+  },
+  {
+    path: "/Home",
+    name: "Home",
+    icon: <FaTh />
+  },
+  {
+    path: "/Education",
+    name: "Education",
+    icon: <FaAddressBook />
+  },
+  {
+    path: "/MyWork ",
+    name: "My work",
+    icon: <MdWorkHistory  />
+  }
+];
 
-// const [isOpen, setIsOpen] = useState(false);
+const SideNav = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+   const [isPopupOpen, setIsPopupOpen] = useState(false);
+   const [tasks, setTasks] = useState([]);
 
-// const toggleNav = () => {
-//   setIsOpen(!isOpen);
-// };
+   useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+  
+    // If invalid or corrupted data is detected, reset localStorage
+    if (storedTasks) {
+      try {
+        setTasks(JSON.parse(storedTasks));
+      } catch (error) {
+        console.error("Error parsing JSON from localStorage:", error);
+        localStorage.removeItem("tasks"); // Clear invalid data from localStorage
+        setTasks([]); // Optionally reset state to default
+      }
+    }
+  }, []);
+
+   useEffect(() =>{
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+   },[tasks]);
+
+   const addTask = (task) => {
+    setTasks((prevTasks) => [...prevTasks, task]);
+  };
 
 
-const SideNav = ({Children}) => {
+  const toggleNav = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen)
+  };
+
   return (
-    <div className='container'>
-     
-         <div className="sidebar">
-          <div className="top-section">
-            <h1 className="logo">Logo</h1>
-            <div className="bar">
-              <FaBars/>
-            </div>
+    <div className='container-fluid'>
+      <div className="sidebar">
+        <div className="top-section">
+          <h1 className="logo">Logo</h1>
+          <div className="bars" >
+            <FaBars onClick={toggleNav}/>
           </div>
-             {
-              menuItem.map((item,index) => (
-                <NavLink to={item.path} key={index} className={index} activeclassName="active" >
-                  <div className="icon">
-                    {item.icon}
-                    <div className="link_text">{item.name}</div>
-                  </div>
-                </NavLink>
-              ))
-             }
-         </div>
-        <main>{Children}</main>
-  
-  
-
-      
+        </div>
+          <div>
+               <button  onClick={togglePopup}>
+               <FaSearchPlus  />
+                Add Task
+                </button>
+        
+          </div>
+        {
+          menuItem.map((item) => (
+            <NavLink
+              to={item.path}
+              key={item.path} 
+              className={({ isActive }) => {
+                console.log(`Path: ${item.path}, isActive: ${isActive}`);
+                return isActive ? "active" : "";
+              }}
+            >
+              <div className="link">
+                <div className="icon">{item.icon}</div> 
+                <div className="link_text">{item.name}</div>
+              </div>
+            </NavLink>
+          ))
+        }
+      </div>
+      <main className='main' >{children}</main>
+      {
+                  isPopupOpen && (
+                    <div className="popup-overlay">
+                      <div className="popup">
+                        <h3>Add Task</h3>
+                      <input type="text" placeholder='Add Title' />
+                      <textarea name="" id="" 
+                         placeholder='Description'
+                      ></textarea>
+                      <Row>
+                      <Col>
+                        <select>
+                        <option value="">Save To</option>
+                                {menuItem.map((item, index) => (
+                                  <option key={index} value={item.name}>
+                                    {item.name}
+                                  </option>
+                                )
+                                )};
+                        </select>
+                      </Col>
+                      <Col>
+                            <button onClick={togglePopup} >Clear</button>
+                            <button onClick={addTask}>Save</button>
+                      </Col>
+                      </Row>
+                     
+                      </div>
+                      
+                    </div>
+                  )
+                }  
     </div>
-    
-  )
-}
+  );
+};
 
-export default SideNav
+export default SideNav;
+
 
 
 
