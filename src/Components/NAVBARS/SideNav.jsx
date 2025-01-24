@@ -38,30 +38,28 @@ const SideNav = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
    const [isPopupOpen, setIsPopupOpen] = useState(false);
    const [tasks, setTasks] = useState([]);
+   const [inputValue, setInputValue] = useState('');
 
-   useEffect(() => {
-    const storedTasks = localStorage.getItem("tasks");
-  
-    // If invalid or corrupted data is detected, reset localStorage
-    if (storedTasks) {
-      try {
-        setTasks(JSON.parse(storedTasks));
-      } catch (error) {
-        console.error("Error parsing JSON from localStorage:", error);
-        localStorage.removeItem("tasks"); // Clear invalid data from localStorage
-        setTasks([]); // Optionally reset state to default
-      }
+   const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('tasks');
+    if (storedTodos) {
+      setTasks(JSON.parse(storedTodos));
     }
   }, []);
 
-   useEffect(() =>{
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-   },[tasks]);
-
-   const addTask = (task) => {
-    setTasks((prevTasks) => [...prevTasks, task]);
-  };
-
+    const handleAddTask = (e) => {
+      e.preventDefault();
+    if (inputValue.trim() !== '') {
+      setTasks([...tasks, inputValue]);
+      setInputValue('');
+      localStorage.setItem('tasks', JSON.stringify([...tasks, inputValue]));
+      togglePopup();
+  }
+    };
 
   const toggleNav = () => {
     setIsOpen(!isOpen);
@@ -93,7 +91,7 @@ const SideNav = ({ children }) => {
               to={item.path}
               key={item.path} 
               className={({ isActive }) => {
-                console.log(`Path: ${item.path}, isActive: ${isActive}`);
+              
                 return isActive ? "active" : "";
               }}
             >
@@ -108,12 +106,14 @@ const SideNav = ({ children }) => {
       <main className='main' >{children}</main>
       {
                   isPopupOpen && (
-                    <div className="popup-overlay">
+                    <div className="popup-overlay">                  
                       <div className="popup">
+                      <form onSubmit={handleAddTask}> 
                         <h3>Add Task</h3>
-                      <input type="text" placeholder='Add Title' />
+                      <input type="text" placeholder='Add Title' onChange={handleInputChange}/>
                       <textarea name="" id="" 
                          placeholder='Description'
+                         onChange={handleInputChange}
                       ></textarea>
                       <Row>
                       <Col>
@@ -129,12 +129,21 @@ const SideNav = ({ children }) => {
                       </Col>
                       <Col>
                             <button onClick={togglePopup} >Clear</button>
-                            <button onClick={addTask}>Save</button>
+                            <button type="submit">Add Task</button>
                       </Col>
                       </Row>
-                     
-                      </div>
-                      
+                    
+                      </form>
+                           </div>
+                        <ul>
+        {tasks.map((task, index) => (
+          <li key={index}>
+            <h3>{task}</h3>
+            <p>{task}</p>
+          </li>
+        ))}
+      </ul>
+                  
                     </div>
                   )
                 }  
