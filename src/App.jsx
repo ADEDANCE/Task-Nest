@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-rou
 import LandingPages from './Landing/LandingPages';
 import SignIn from './Components/SignUp/SignIn';
 import SideNav from './Components/NAVBARS/SideNav';
-import Dashbord from './Components/Pages/Dashbord';
+import MyWork from './Components/Pages/Mywork';
 import AddTask from './Components/Pages/AddTask';
 import Home from './Components/Pages/Home';
 import MyProjects from './Components/Pages/MyProjects';
@@ -14,10 +14,10 @@ function App() {
   return (
      
         
-           <BrowserRouter>
+           <Router>
             <SideNav>
            <Routes>
-          <Route path='/Dashbord' element={<Dashbord/>} />
+          <Route path='/MyWork' element={<MyWork/>} />
          <Route path='/AddTask' element={<AddTask/>}/>
          <Route path='/Home' element={<Home/>}/>
          <Route path='/Education' element={<Education/>}/>
@@ -25,7 +25,7 @@ function App() {
         /* <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>
         </SideNav>
-        </BrowserRouter>
+        </Router>
       
         //  <Route path="/" element={<LandingPages />} />
         // <Route path="/signIn/" element={<SignIn/>} />
