@@ -2,7 +2,8 @@ import React from 'react'
 
 const MyProjects = () => {
   return (
-    <div>MyProjects</div>
+    <div 
+    >MyProjects</div>
   )
 }
 
