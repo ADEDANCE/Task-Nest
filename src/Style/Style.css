@@ -1,6 +1,119 @@
-.nav {
-    background-color: rgb(243, 113, 113);
-    height: 70px;
-    text-align: center;
-    color: white;
+*{
+    margin: 0  !important;
+    padding: 0  !important;
+    text-decoration: none  !important;
 }
+
+.container-fluid {
+   display: flex;
+   margin: 0;
+    padding: 0;
+    text-decoration: none;
+   /* height: 100vh;  */
+   
+}
+
+body {
+    background-color: burlywood   !important;
+}
+
+.main {
+    width: 100%  !important;
+    padding: 20px  !important;
+}
+
+/* .active-link {
+    background-color: #575757;
+    font-weight: bold;
+  } */
+
+  .sidebar {
+    background-color: darkgrey;
+    /* margin-top: -8px; */
+    height: 100vh;
+    width: 200px;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .top-section {
+    display: flex  !important;
+    align-items: center  !important;
+    padding: 20px 15px  !important;
+  }
+  
+
+  .logo {
+    font-size: 30px  !important;
+  }
+
+  .bars {
+     margin-left: 30px  !important;
+     display: flex  !important;
+     font: 30px  !important;
+  }
+
+
+
+
+  .link {
+    display: flex  !important;
+    color: white;
+    gap: 15px ;
+    padding: 10px 15px  !important;
+    transition: all 0.5sS;
+  }
+
+  .link:hover {
+    background-color: aqua;
+    color: #000;
+  }
+
+  .active {
+    background-color: aqua  !important;
+    color: #000   !important;
+  }
+
+  .icon, .active-link {
+    font-size: 20px ;
+  }
+
+  body {
+    text-align: center  !important;
+    
+  }
+
+  .popup-overlay {
+    /* width: 200px; */
+    /* background-color:#fff ; */
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex ;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px  !important;
+    /* z-index: 1000; */
+  }
+
+  .popup {
+    background: #fff;
+    border-radius: 20px;
+    width: 50% ;
+    position: relative;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  }
+
+  .popup input,
+.popup textarea {
+  width: 90% ;
+  margin: 10px 0;
+  padding: 10px  !important;
+  border: none;
+  outline: none;
+}
+ 
