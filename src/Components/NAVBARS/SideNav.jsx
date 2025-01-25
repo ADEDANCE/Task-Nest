@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';  // Import useState if you plan to use it
 import { FaTh, FaBars,FaSearchPlus,FaAddressBook   } from 'react-icons/fa';
-import { AiOutlineClose } from 'react-icons/ai';
 import { MdWorkHistory } from "react-icons/md";
 import { NavLink } from 'react-router-dom';
 import {Row,Col} from 'react-bootstrap'
@@ -37,29 +36,7 @@ const menuItem = [
 const SideNav = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
    const [isPopupOpen, setIsPopupOpen] = useState(false);
-   const [tasks, setTasks] = useState([]);
-   const [inputValue, setInputValue] = useState('');
 
-   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('tasks');
-    if (storedTodos) {
-      setTasks(JSON.parse(storedTodos));
-    }
-  }, []);
-
-    const handleAddTask = (e) => {
-      e.preventDefault();
-    if (inputValue.trim() !== '') {
-      setTasks([...tasks, inputValue]);
-      setInputValue('');
-      localStorage.setItem('tasks', JSON.stringify([...tasks, inputValue]));
-      togglePopup();
-  }
-    };
 
   const toggleNav = () => {
     setIsOpen(!isOpen);
@@ -108,24 +85,16 @@ const SideNav = ({ children }) => {
                   isPopupOpen && (
                     <div className="popup-overlay">                  
                       <div className="popup">
-                      <form onSubmit={handleAddTask}> 
+                      <form > 
+                      {/* onSubmit={handleAddTask} */}
                         <h3>Add Task</h3>
-                      <input type="text" placeholder='Add Title' onChange={handleInputChange}/>
+                      <input type="text" placeholder='Add Title'/>
                       <textarea name="" id="" 
                          placeholder='Description'
-                         onChange={handleInputChange}
                       ></textarea>
                       <Row>
                       <Col>
-                        <select>
-                        <option value="">Save To</option>
-                                {menuItem.map((item, index) => (
-                                  <option key={index} value={item.name}>
-                                    {item.name}
-                                  </option>
-                                )
-                                )};
-                        </select>
+                  
                       </Col>
                       <Col>
                             <button onClick={togglePopup} >Clear</button>
@@ -135,14 +104,7 @@ const SideNav = ({ children }) => {
                     
                       </form>
                            </div>
-                        <ul>
-        {tasks.map((task, index) => (
-          <li key={index}>
-            <h3>{task}</h3>
-            <p>{task}</p>
-          </li>
-        ))}
-      </ul>
+       
                   
                     </div>
                   )
@@ -155,10 +117,27 @@ export default SideNav;
 
 
 
+{/* <select>
+<option value="">Save To</option>
+        {menuItem.map((item, index) => (
+          <option key={index} value={item.name}>
+            {item.name}
+          </option>
+        )
+        )};
+</select> */}
 
 
 
 
+
+
+
+
+//   setTasks(tasks.map(task => task.index === index ? {...AddTask.task, isEditing : !task.isEditing} : task) )
+//    setEditIndex(index);
+// setInputValue(tasks[index]);
+// }
 
 
 
