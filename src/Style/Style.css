@@ -117,3 +117,36 @@ body {
   outline: none;
 }
  
+
+.To-do {
+  margin-top: 40px !important;
+}
+
+
+
+input[type='text'] {
+   font-size: large;
+   padding: 10px;
+   border: 2px solid grey;
+   border-radius: 6px;
+}
+
+.AddTasks {
+  width: 70px;
+  padding: 2px !important;
+  border-radius: 6px;
+}
+
+li {
+  list-style: none;
+  padding: o;
+  background-color: #fff;
+  margin: 10px !important;
+  display: flex;
+  
+}
+
+.text {
+  flex: 1;
+}
+
