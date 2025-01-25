@@ -1,19 +1,76 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+
 
 const AddTask = () => {
+  const [tasks, setTasks] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+
+  // Load tasks from localStorage on mount
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks'); // Key is 'tasks'
+    if (savedTasks) {
+      try {
+        setTasks(JSON.parse(savedTasks)); 
+      } catch (error) {
+        console.error("Error parsing saved tasks:", error);
+      }
+    }
+  }, []);
+
+  // Save tasks to localStorage whenever `tasks` changes
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem('tasks', JSON.stringify(tasks)); // Save to localStorage
+    }
+  }, [tasks]);
+  // Add a new task
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    if (inputValue.trim() !== '') {
+      setTasks([...tasks, inputValue]);
+      setInputValue(''); // Clear input field
+    }
+  };
+
+  const handleDeleteTask = (index) => {
+    const updatedTask = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTask);
+  };
+
+
+
   return (
-    <>
-        
-    </>
-  )
-}
+    <div className='To-do'>
+      <div className="form">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button onClick={handleAddTask} className='AddTasks' >Add</button>
+      </div>
+      <div className="taskarea">
+        <ul>
+          {tasks.map((task, index) => (
+            <li key={index}>
+              <span className='text' >{task}</span>
+              <button className=''>Edit</button>
+              <button onClick={() => handleDeleteTask(index)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
 
-export default AddTask
+export default AddTask;
 
 
 
 
-// import React from "react";
+
+
 // import Button from "react-bootstrap/Button";
 // import Form from "react-bootstrap/Form";
 // import Modal from "react-bootstrap/Modal";
