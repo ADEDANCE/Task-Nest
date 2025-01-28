@@ -135,6 +135,9 @@ input[type='text'] {
   width: 70px;
   padding: 2px !important;
   border-radius: 6px;
+  background-color: red;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 li {
@@ -142,11 +145,29 @@ li {
   padding: o;
   background-color: #fff;
   margin: 10px !important;
+  text-align: center;
+  align-items: center;
   display: flex;
-  
+   height: 40px;
 }
 
 .text {
   flex: 1;
+}
+
+.Taskbuttons {
+  font-size: x-large;
+}
+
+.Taskbuttons:hover {
+  color: #000;
+}
+
+.DeleteB:hover {
+  color: red;
+}
+
+.Editb:hover {
+  color: green;
 }
 
