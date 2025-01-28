@@ -3,6 +3,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import EditTask from './EditTask';
 
+
 const AddTask = () => {
   const [tasks, setTasks] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -33,7 +34,7 @@ const AddTask = () => {
     e.preventDefault();
     if (inputValue.trim() !== '') {
       setTasks([...tasks, { id: Date.now(), text: inputValue }]);
-      setInputValue('');
+      setInputValue(''); // Reset input field after adding task
     }
   };
 
@@ -47,6 +48,12 @@ const AddTask = () => {
   const handleEditTask = (task) => {
     setIsEditing(true);
     setCurrentTask(task); // Set the current task being edited
+  };
+
+  const  style = {
+    animation: "glow 1s ease-in-out",
+    border: "2px solid #4caf50",
+    transition: "all 0.3s ease",
   };
 
   // Save the edited task
@@ -92,16 +99,19 @@ const AddTask = () => {
           </div>
         </>
       ) : (
-        <>
-
-<EditTask
-          task={currentTask}
-          onSave={handleSaveTask}
-          onCancel={() => setIsEditing(false)}
-        />
-                    <div className="taskarea">
+        currentTask && (  
+          // Check if currentTask exists before rendering EditTask
+          <>
+             <EditTask
+            task={currentTask}
+            onSave={handleSaveTask}
+            onCancel={() => setIsEditing(false)}
+          />
+                      <div className="taskarea">
             <ul>
-              {tasks.map(task => (
+              {tasks
+              .filter(task => task.id !== currentTask.id)
+              .map(task => (
                 <li key={task.id}>
                   <span className="text">{task.text}</span>
                   <div className="Taskbuttons">
@@ -113,16 +123,23 @@ const AddTask = () => {
                       className="DeleteB"
                       onClick={() => handleDeleteTask(task.id)}
                     />
+                   
+                    
                   </div>
                 </li>
               ))}
             </ul>
           </div>
-        </>
-      
+          </>
+       
+          
+        )
       )}
     </div>
   );
 };
 
 export default AddTask;
+
+
+
