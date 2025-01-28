@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+import EditTask from './EditTask';
 
 const AddTask = () => {
   const [tasks, setTasks] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentTask, setCurrentTask] = useState(null);
 
   // Load tasks from localStorage on mount
   useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks'); // Key is 'tasks'
+    const savedTasks = localStorage.getItem('tasks');
     if (savedTasks) {
       try {
-        setTasks(JSON.parse(savedTasks)); 
+        setTasks(JSON.parse(savedTasks));
       } catch (error) {
         console.error("Error parsing saved tasks:", error);
       }
@@ -20,114 +24,105 @@ const AddTask = () => {
   // Save tasks to localStorage whenever `tasks` changes
   useEffect(() => {
     if (tasks.length > 0) {
-      localStorage.setItem('tasks', JSON.stringify(tasks)); // Save to localStorage
+      localStorage.setItem('tasks', JSON.stringify(tasks));
     }
   }, [tasks]);
+
   // Add a new task
   const handleAddTask = (e) => {
     e.preventDefault();
     if (inputValue.trim() !== '') {
-      setTasks([...tasks, inputValue]);
-      setInputValue(''); // Clear input field
+      setTasks([...tasks, { id: Date.now(), text: inputValue }]);
+      setInputValue('');
     }
   };
 
-  const handleDeleteTask = (index) => {
-    const updatedTask = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTask);
+  // Delete a task
+  const handleDeleteTask = (id) => {
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTasks(updatedTasks);
   };
 
+  // Edit a task
+  const handleEditTask = (task) => {
+    setIsEditing(true);
+    setCurrentTask(task); // Set the current task being edited
+  };
 
+  // Save the edited task
+  const handleSaveTask = (id, updatedText) => {
+    const updatedTasks = tasks.map(task =>
+      task.id === id ? { ...task, text: updatedText } : task
+    );
+    setTasks(updatedTasks);
+    setIsEditing(false); // Exit editing mode
+    setCurrentTask(null); // Clear current task
+  };
 
   return (
-    <div className='To-do'>
-      <div className="form">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+    <div className="To-do">
+      {!isEditing ? (
+        <>
+          <div className="form">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button onClick={handleAddTask} className="AddTasks">Add</button>
+          </div>
+          <div className="taskarea">
+            <ul>
+              {tasks.map(task => (
+                <li key={task.id}>
+                  <span className="text">{task.text}</span>
+                  <div className="Taskbuttons">
+                    <FaRegEdit
+                      className="Editb"
+                      onClick={() => handleEditTask(task)}
+                    />
+                    <MdDeleteForever
+                      className="DeleteB"
+                      onClick={() => handleDeleteTask(task.id)}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      ) : (
+        <>
+
+<EditTask
+          task={currentTask}
+          onSave={handleSaveTask}
+          onCancel={() => setIsEditing(false)}
         />
-        <button onClick={handleAddTask} className='AddTasks' >Add</button>
-      </div>
-      <div className="taskarea">
-        <ul>
-          {tasks.map((task, index) => (
-            <li key={index}>
-              <span className='text' >{task}</span>
-              <button className=''>Edit</button>
-              <button onClick={() => handleDeleteTask(index)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      </div>
+                    <div className="taskarea">
+            <ul>
+              {tasks.map(task => (
+                <li key={task.id}>
+                  <span className="text">{task.text}</span>
+                  <div className="Taskbuttons">
+                    <FaRegEdit
+                      className="Editb"
+                      onClick={() => handleEditTask(task)}
+                    />
+                    <MdDeleteForever
+                      className="DeleteB"
+                      onClick={() => handleDeleteTask(task.id)}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      
+      )}
     </div>
   );
 };
 
 export default AddTask;
-
-
-
-
-
-
-// import Button from "react-bootstrap/Button";
-// import Form from "react-bootstrap/Form";
-// import Modal from "react-bootstrap/Modal";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import { Container, Row, Col } from "react-bootstrap";
-// import DropdownSearch from "./DropdownSearch";
-
-// const AddTask = ({ show, handleClose, handleAddTask, task, setTask,  }) => {
-//   const options = ["My project", "Home", "My work", "Education"];
-
-//   return (
-//     <>
-//       <Modal show={show} onHide={handleClose} centered className="Taskbutton">
-//         <Modal.Body>
-//           <Form>
-//             <Form.Group className="mb-4" controlId="taskTitle">
-//               <Form.Control
-//                 type="text"
-//                 placeholder="Task Title"
-//                 autoFocus
-//                 value={task.title || ""}
-//                 onChange={(e) => setTask({ ...task, title: e.target.value })}
-//               />
-//             </Form.Group>
-//             <Form.Group className="mb-3" controlId="taskDescription">
-//               <Form.Control
-//                 placeholder="Task Description"
-//                 as="textarea"
-//                 rows={2}
-//                 value={task.description || ""}
-//                 onChange={(e) =>
-//                   setTask({ ...task, description: e.target.value })
-//                 }
-//               />
-//             </Form.Group>
-//           </Form>
-//         </Modal.Body>
-//         <Modal.Footer>
-//           <Container fluid="md">
-//             <Row>
-//               <Col>
-//                 <DropdownSearch options={options} />
-//               </Col>
-//               <Col className="text-end">
-//                 <Button variant="secondary" onClick={handleClose}>
-//                   Close
-//                 </Button>
-//                 <Button variant="primary" onClick={handleAddTask} className="ms-2">
-//                   Save Changes
-//                 </Button>
-//               </Col>
-//             </Row>
-//           </Container>
-//         </Modal.Footer>
-//       </Modal>
-//     </>
-//   );
-// };
-
-// export default AddTask;
